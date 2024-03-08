@@ -1,0 +1,35 @@
+[package]
+name = "vmagentfdw"
+version = "0.0.2"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+default = ["cshim", "pg15"]
+cshim = ["pgrx/cshim", "supabase-wrappers/cshim"]
+pg14 = ["pgrx/pg14", "pgrx-tests/pg14", "supabase-wrappers/pg14"]
+pg15 = ["pgrx/pg15", "pgrx-tests/pg15", "supabase-wrappers/pg15"]
+pg16 = ["pgrx/pg16", "pgrx-tests/pg16", "supabase-wrappers/pg16"]
+pg_test = []
+
+[dependencies]
+pgrx = "=0.11.0"
+supabase-wrappers = { git = "https://github.com/supabase/wrappers.git", rev = "v0.2.0", default-features = false }
+reqwest = { version = "0.11.24", features = ["rustls-tls", "blocking", "json"], default-features = false }
+chrono = { version = "0.4.26", features = ["serde"] }
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.114"
+
+[dev-dependencies]
+pgrx-tests = "=0.11.0"
+
+[profile.dev]
+panic = "unwind"
+
+[profile.release]
+panic = "unwind"
+opt-level = 3
+lto = "fat"
+codegen-units = 1
